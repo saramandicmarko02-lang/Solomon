@@ -53,9 +53,9 @@ try {
     if ($iscc) {
         Write-Host "==> Building Inno Setup installer" -ForegroundColor Cyan
         & $iscc (Join-Path $Root "installer\solomon.iss")
-        Write-Host "Inno Setup EXE created in dist\" -ForegroundColor Green
+        Write-Host "Inno Setup EXE created in dist folder" -ForegroundColor Green
     } else {
-        Write-Host "Inno Setup not found — ZIP package is ready. Install Inno Setup 6 to also build .exe installer." -ForegroundColor Yellow
+        Write-Host "Inno Setup not found. ZIP package is ready. Install Inno Setup 6 to also build .exe installer." -ForegroundColor Yellow
     }
 }
 finally {

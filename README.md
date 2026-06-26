@@ -34,6 +34,13 @@ dotnet run --project src/Solomon.Worker
 # Otvorite http://127.0.0.1:5050/
 ```
 
+### Build instalacionog paketa (PowerShell)
+
+```powershell
+cd C:\path\to\Solomon
+powershell -ExecutionPolicy Bypass -File .\installer\build-package.ps1
+```
+
 ## Produkcijski build + installer
 
 ```powershell
