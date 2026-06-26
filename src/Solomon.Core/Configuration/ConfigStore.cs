@@ -152,7 +152,8 @@ public sealed class ConfigStore : IConfigStore
         ServerBaseUrl = s.ServerBaseUrl,
         AdminPort = s.AdminPort,
         HeartbeatIntervalSeconds = s.HeartbeatIntervalSeconds,
-        InputFolderPath = s.InputFolderPath
+        InputFolderPath = s.InputFolderPath,
+        EnrollmentPath = s.EnrollmentPath
     };
 
     private static StoredCredentials CloneCredentials(StoredCredentials c) => new()

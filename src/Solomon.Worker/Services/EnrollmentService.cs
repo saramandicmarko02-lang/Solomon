@@ -43,7 +43,14 @@ public sealed class EnrollmentService : IEnrollmentService
         }
 
         var baseUrl = serverBaseUrl.TrimEnd('/');
-        var enrollUrl = $"{baseUrl}/agent/enroll";
+        var settings = _configStore.GetSettings();
+        var enrollPath = string.IsNullOrWhiteSpace(settings.EnrollmentPath) ? "/agent/enroll" : settings.EnrollmentPath.Trim();
+        if (!enrollPath.StartsWith('/'))
+        {
+            enrollPath = "/" + enrollPath;
+        }
+
+        var enrollUrl = $"{baseUrl}{enrollPath}";
 
         try
         {
@@ -54,8 +61,14 @@ public sealed class EnrollmentService : IEnrollmentService
             if (!response.IsSuccessStatusCode)
             {
                 var body = await response.Content.ReadAsStringAsync(cancellationToken);
-                _logger.LogWarning("Enrollment failed: {Status} {Body}", response.StatusCode, body);
-                return (false, $"Enrollment failed ({(int)response.StatusCode}).");
+                _logger.LogWarning("Enrollment failed: {Status} {Url} {Body}", response.StatusCode, enrollUrl, body);
+
+                var hint = response.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed
+                    ? " Server ne prihvata POST na ovoj putanji — proverite API base URL (ne frontend URL) i enrollment putanju."
+                    : string.Empty;
+
+                var detail = string.IsNullOrWhiteSpace(body) ? string.Empty : $" Odgovor: {Truncate(body, 200)}";
+                return (false, $"Enrollment failed ({(int)response.StatusCode}) na {enrollUrl}.{hint}{detail}");
             }
 
             var result = await response.Content.ReadFromJsonAsync<EnrollmentResponse>(JsonOptions, cancellationToken);
@@ -64,7 +77,6 @@ public sealed class EnrollmentService : IEnrollmentService
                 return (false, "Invalid enrollment response from server.");
             }
 
-            var settings = _configStore.GetSettings();
             settings.ServerBaseUrl = baseUrl;
             _configStore.SaveSettings(settings);
 
@@ -84,5 +96,15 @@ public sealed class EnrollmentService : IEnrollmentService
             _logger.LogError(ex, "Enrollment request failed");
             return (false, ex.Message);
         }
+    }
+
+    private static string Truncate(string value, int maxLength)
+    {
+        if (value.Length <= maxLength)
+        {
+            return value;
+        }
+
+        return value[..maxLength] + "...";
     }
 }

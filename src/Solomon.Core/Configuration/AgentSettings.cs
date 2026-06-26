@@ -15,6 +15,9 @@ public sealed class AgentSettings
 
     /// <summary>Root folder watched for subdirectories and file delivery target.</summary>
     public string InputFolderPath { get; set; } = string.Empty;
+
+    /// <summary>Enrollment endpoint path relative to ServerBaseUrl, e.g. /agent/enroll</summary>
+    public string EnrollmentPath { get; set; } = "/agent/enroll";
 }
 
 public sealed class StoredCredentials

@@ -36,8 +36,12 @@
         <h2>Konfiguracija servera</h2>
         <form id="settingsForm">
           <label>
-            URL cloud aplikacije
+            URL cloud aplikacije (API base URL, ne adresa frontenda)
             <input type="url" id="serverBaseUrl" placeholder="https://api.vasa-aplikacija.com" required>
+          </label>
+          <label>
+            Enrollment putanja (relativno na API URL)
+            <input type="text" id="enrollmentPath" placeholder="/agent/enroll" value="/agent/enroll">
           </label>
           <label>
             Input folder (root za fajlove ka back-office aplikaciji)

@@ -36,7 +36,9 @@ public static class AdminUiExtensions
                 lastError = state.LastError,
                 serverBaseUrl = settings.ServerBaseUrl,
                 inputFolderPath = settings.InputFolderPath,
-                adminPort = settings.AdminPort
+                adminPort = settings.AdminPort,
+                heartbeatIntervalSeconds = settings.HeartbeatIntervalSeconds,
+                enrollmentPath = settings.EnrollmentPath
             });
         });
 
@@ -71,6 +73,11 @@ public static class AdminUiExtensions
             if (body.HeartbeatIntervalSeconds is >= 5 and <= 10)
             {
                 settings.HeartbeatIntervalSeconds = body.HeartbeatIntervalSeconds.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(body.EnrollmentPath))
+            {
+                settings.EnrollmentPath = body.EnrollmentPath.Trim();
             }
 
             config.SaveSettings(settings);
@@ -120,6 +127,7 @@ public static class AdminUiExtensions
         public string? InputFolderPath { get; init; }
         public int? AdminPort { get; init; }
         public int? HeartbeatIntervalSeconds { get; init; }
+        public string? EnrollmentPath { get; init; }
     }
 
     private sealed class EnrollRequest
