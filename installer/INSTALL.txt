@@ -1,0 +1,50 @@
+Solomon Agent — Windows Server install package
+===========================================
+
+Requirements
+------------
+- Windows 10/11 or Windows Server 2019/2022/2025 (x64)
+- Administrator privileges
+- Outbound HTTPS/WSS access to your cloud application
+
+Install (recommended)
+---------------------
+1. Copy this ZIP to the server (e.g. C:\Temp\)
+2. Extract the ZIP to a folder (e.g. C:\Temp\Solomon\)
+3. Right-click PowerShell → Run as administrator
+4. Run:
+
+   cd C:\Temp\Solomon
+   Set-ExecutionPolicy -Scope Process Bypass
+   .\Install-Solomon.ps1
+
+5. Browser opens http://127.0.0.1:5050/
+6. Configure:
+   - Cloud app URL
+   - Input folder path (create the folder first if needed, e.g. C:\Solomon\Input)
+   - Enrollment code from your web application
+
+Uninstall
+---------
+Run as administrator:
+
+   .\Uninstall-Solomon.ps1
+
+Logs
+----
+%ProgramData%\Solomon\logs\
+
+Service name
+------------
+Solomon Agent
+
+Manual service check
+--------------------
+   sc query "Solomon Agent"
+   Get-Service "Solomon Agent"
+
+Troubleshooting
+---------------
+- If admin panel does not open: ensure service is running and port 5050 is free
+- If WebSocket fails: verify enrollment code and server URL in admin panel
+- Service account: runs as Local System by default; for DPAPI, dedicated account with profile is recommended for production

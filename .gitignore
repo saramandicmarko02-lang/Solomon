@@ -1,0 +1,17 @@
+## Build artifacts
+bin/
+obj/
+publish/
+*.user
+*.suo
+
+## IDE
+.vs/
+.idea/
+
+## Logs
+*.log
+
+## OS
+.DS_Store
+Thumbs.db

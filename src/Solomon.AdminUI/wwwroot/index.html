@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solomon Agent — Admin</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <h1>Solomon Agent</h1>
+          <p class="subtitle">Lokalni middleware za razmenu podataka sa cloud aplikacijom</p>
+        </div>
+      </div>
+      <div id="connectionBadge" class="badge badge-offline">Nepoznato</div>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Status konekcije</h2>
+        <dl class="status-grid">
+          <div><dt>Registrovan</dt><dd id="enrolled">—</dd></div>
+          <div><dt>Agent ID</dt><dd id="agentId" class="mono">—</dd></div>
+          <div><dt>WebSocket</dt><dd id="wsStatus">—</dd></div>
+          <div><dt>Poslednji heartbeat</dt><dd id="lastHeartbeat">—</dd></div>
+          <div><dt>Poslednji pokušaj</dt><dd id="lastAttempt">—</dd></div>
+          <div><dt>Greška</dt><dd id="lastError">—</dd></div>
+        </dl>
+      </section>
+
+      <section class="card">
+        <h2>Konfiguracija servera</h2>
+        <form id="settingsForm">
+          <label>
+            URL cloud aplikacije
+            <input type="url" id="serverBaseUrl" placeholder="https://api.vasa-aplikacija.com" required>
+          </label>
+          <label>
+            Input folder (root za fajlove ka back-office aplikaciji)
+            <input type="text" id="inputFolderPath" placeholder="C:\Solomon\Input">
+          </label>
+          <div class="row">
+            <label>
+              Admin port (127.0.0.1)
+              <input type="number" id="adminPort" min="1024" max="65535" value="5050">
+            </label>
+            <label>
+              Heartbeat interval (s)
+              <input type="number" id="heartbeatInterval" min="5" max="10" value="7">
+            </label>
+          </div>
+          <button type="submit" class="btn primary">Sačuvaj podešavanja</button>
+        </form>
+        <p id="settingsMessage" class="message" hidden></p>
+      </section>
+
+      <section class="card">
+        <h2>Registracija agenta (enrollment)</h2>
+        <p class="hint">Unesite jednokratni enrollment kod iz vaše web aplikacije. Nakon uspešne registracije, API token se čuva enkriptovano (DPAPI).</p>
+        <form id="enrollForm">
+          <label>
+            Enrollment kod / API ključ
+            <input type="password" id="enrollmentCode" autocomplete="off" required>
+          </label>
+          <div class="actions">
+            <button type="submit" class="btn primary">Registruj agenta</button>
+            <button type="button" id="unenrollBtn" class="btn danger">Ukloni registraciju</button>
+          </div>
+        </form>
+        <p id="enrollMessage" class="message" hidden></p>
+      </section>
+
+      <section class="card">
+        <h2>Nedavna aktivnost</h2>
+        <div id="activityLog" class="activity-log">
+          <p class="muted">Učitavanje…</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Solomon Agent radi isključivo lokalno. Admin panel dostupan samo na <strong>127.0.0.1</strong>.</p>
+    </footer>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
