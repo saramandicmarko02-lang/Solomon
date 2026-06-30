@@ -21,6 +21,8 @@ public sealed class WebSocketAgentService : BackgroundService
     private readonly IFolderScanner _folderScanner;
     private readonly IJobWriter _jobWriter;
     private readonly IAgentRuntimeState _runtimeState;
+    private readonly IAgentMetrics _metrics;
+    private readonly IJobMetricsService _jobMetrics;
     private readonly ILogger<WebSocketAgentService> _logger;
 
     private int _backoffSeconds = 1;
@@ -31,12 +33,16 @@ public sealed class WebSocketAgentService : BackgroundService
         IFolderScanner folderScanner,
         IJobWriter jobWriter,
         IAgentRuntimeState runtimeState,
+        IAgentMetrics metrics,
+        IJobMetricsService jobMetrics,
         ILogger<WebSocketAgentService> logger)
     {
         _configStore = configStore;
         _folderScanner = folderScanner;
         _jobWriter = jobWriter;
         _runtimeState = runtimeState;
+        _metrics = metrics;
+        _jobMetrics = jobMetrics;
         _logger = logger;
     }
 
@@ -50,6 +56,7 @@ public sealed class WebSocketAgentService : BackgroundService
             if (credentials is null || string.IsNullOrWhiteSpace(credentials.WebSocketUrl))
             {
                 _runtimeState.SetConnected(false);
+                _metrics.RecordConnectionState(false);
                 _runtimeState.RecordConnectionAttempt("Not enrolled — configure via admin UI.");
                 await DelaySafe(TimeSpan.FromSeconds(5), stoppingToken);
                 continue;
@@ -99,6 +106,7 @@ public sealed class WebSocketAgentService : BackgroundService
 
         _backoffSeconds = 1;
         _runtimeState.SetConnected(true);
+        _metrics.RecordConnectionState(true);
         _runtimeState.AddActivity("info", "Connected to cloud server.");
         _logger.LogInformation("WebSocket connected");
 
@@ -133,6 +141,7 @@ public sealed class WebSocketAgentService : BackgroundService
         }
 
         _runtimeState.SetConnected(false);
+        _metrics.RecordConnectionState(false);
         _runtimeState.AddActivity("warn", "Disconnected from cloud server.");
 
         if (completed.IsFaulted)
@@ -155,11 +164,15 @@ public sealed class WebSocketAgentService : BackgroundService
             {
                 AgentId = credentials.AgentId,
                 Timestamp = DateTime.UtcNow.ToString("O"),
-                InputFolders = folders
+                InputFolders = folders,
+                InputRootPath = string.IsNullOrWhiteSpace(settings.InputFolderPath)
+                    ? null
+                    : settings.InputFolderPath.Trim()
             };
 
             await SendJsonAsync(socket, heartbeat, cancellationToken);
             _runtimeState.RecordHeartbeat();
+            _metrics.RecordHeartbeat(true);
             _logger.LogDebug("Heartbeat sent with {Count} folders", folders.Count);
 
             await Task.Delay(interval, cancellationToken);
@@ -232,6 +245,15 @@ public sealed class WebSocketAgentService : BackgroundService
         };
 
         await SendJsonAsync(socket, status, cancellationToken);
+
+        if (success)
+        {
+            _jobMetrics.RecordDelivered();
+        }
+        else
+        {
+            _jobMetrics.RecordFailed();
+        }
 
         _runtimeState.AddActivity(
             success ? "info" : "error",

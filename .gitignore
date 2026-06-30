@@ -2,8 +2,16 @@
 bin/
 obj/
 publish/
+dist/
 *.user
 *.suo
+
+## Admin UI (Next.js export regenerates wwwroot via build-admin-ui.ps1)
+src/Solomon.AdminUI/wwwroot/*
+!src/Solomon.AdminUI/wwwroot/.gitkeep
+src/Solomon.AdminUI.Web/node_modules/
+src/Solomon.AdminUI.Web/.next/
+src/Solomon.AdminUI.Web/out/
 
 ## IDE
 .vs/

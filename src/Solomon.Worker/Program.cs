@@ -47,6 +47,10 @@ try
 
     builder.Services.AddSingleton<IConfigStore>(configStore);
     builder.Services.AddSingleton<IAgentRuntimeState, AgentRuntimeState>();
+    builder.Services.AddSingleton<IAgentMetrics, AgentMetrics>();
+    builder.Services.AddSingleton<IJobMetricsService, JobMetricsService>();
+    builder.Services.AddSingleton<IHealthCheckService, HealthCheckService>();
+    builder.Services.AddSingleton<ISystemInfoService, SystemInfoService>();
     builder.Services.AddSingleton<IFolderScanner, FolderScanner>();
     builder.Services.AddSingleton<IJobWriter, JobWriter>();
     builder.Services.AddHttpClient("SolomonEnrollment", client =>
@@ -55,6 +59,7 @@ try
     });
     builder.Services.AddSingleton<IEnrollmentService, EnrollmentService>();
     builder.Services.AddHostedService<WebSocketAgentService>();
+    builder.Services.AddHostedService<MetricsSamplerService>();
 
     builder.Services.AddSolomonAdminUI();
 

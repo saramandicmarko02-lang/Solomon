@@ -17,11 +17,14 @@ Canonical contract between the Solomon Windows agent and the cloud web applicati
   "type": "heartbeat",
   "agentId": "uuid",
   "timestamp": "2026-06-20T10:00:00Z",
-  "inputFolders": ["Subfolder1", "Subfolder2"]
+  "inputFolders": ["Subfolder1", "Subfolder2"],
+  "inputRootPath": "C:\\Solomon\\Input"
 }
 ```
 
 `inputFolders` lists **immediate subdirectories** of the configured Input root folder. Empty array if none exist.
+
+Optional field `inputRootPath` reports the configured Input root path on the agent machine.
 
 ### Server → Agent (job dispatch)
 

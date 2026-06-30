@@ -22,6 +22,10 @@ public sealed class HeartbeatMessage
 
     [JsonPropertyName("inputFolders")]
     public required IReadOnlyList<string> InputFolders { get; init; }
+
+    /// <summary>Configured Input root path on the agent machine (optional but recommended).</summary>
+    [JsonPropertyName("inputRootPath")]
+    public string? InputRootPath { get; init; }
 }
 
 public sealed class JobDispatchMessage

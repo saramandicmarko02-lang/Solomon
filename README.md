@@ -20,7 +20,8 @@ Solomon/
 ├── src/
 │   ├── Solomon.Core/       — protokol, ConfigStore (DPAPI), FolderScanner, JobWriter
 │   ├── Solomon.Worker/     — Windows Service + WebSocket agent + Kestrel host
-│   └── Solomon.AdminUI/    — lokalni admin API + embedded UI
+│   ├── Solomon.AdminUI/    — lokalni admin API + embedded UI (wwwroot iz Next.js export-a)
+│   └── Solomon.AdminUI.Web/ — Next.js build alat za admin panel (static export)
 ├── docs/agent-protocol.md  — ugovor sa web app-om
 └── installer/solomon.iss   — Inno Setup installer
 ```
@@ -28,11 +29,22 @@ Solomon/
 ## Brzi start (dev)
 
 ```powershell
-# Windows, .NET 8 SDK
+# Windows, .NET 8 SDK + Node.js 20+
 dotnet restore
 dotnet run --project src/Solomon.Worker
 # Otvorite http://127.0.0.1:5050/
 ```
+
+### Admin UI front-end (dev sa hot reload)
+
+```bash
+cd src/Solomon.AdminUI.Web
+npm install
+npm run dev
+# http://localhost:3000 — API se proksira na 127.0.0.1:5050 (pokrenite Worker u drugom terminalu)
+```
+
+**Node.js:** 20 LTS ili noviji (potreban za `npm run build` pre `dotnet publish` / installer build-a).
 
 ### Build instalacionog paketa (PowerShell)
 
@@ -41,9 +53,14 @@ cd C:\path\to\Solomon
 powershell -ExecutionPolicy Bypass -File .\installer\build-package.ps1
 ```
 
+`build-package.ps1` prvo pokreće Next.js static export (`installer/build-admin-ui.ps1`), zatim `dotnet publish`.
+
 ## Produkcijski build + installer
 
 ```powershell
+# Samo admin UI static export:
+powershell -ExecutionPolicy Bypass -File .\installer\build-admin-ui.ps1
+
 dotnet publish src/Solomon.Worker -c Release -r win-x64 --self-contained -o publish/Solomon.Worker
 # Zatim kompajlirajte installer/solomon.iss u Inno Setup Compiler
 ```
@@ -81,6 +98,10 @@ Detalji u [docs/agent-protocol.md](docs/agent-protocol.md).
 | Enkripcija | DPAPI `CurrentUser` — pokretati servis pod dedicated service account sa učitanim profilom |
 | Logovanje | Serilog rolling file u `%ProgramData%\Solomon\logs` |
 | Installer | **Inno Setup** (jednostavniji od WiX); za SmartScreen potreban **code signing** certifikat (EV preporučen) |
+
+## Windows installer (Inno Setup)
+
+Detaljan vodič: [docs/installer-windows.md](docs/installer-windows.md)
 
 ## Code signing
 

@@ -7,6 +7,9 @@ $Version = "1.0.0"
 $ZipName = "SolomonAgent-$Version-win-x64.zip"
 $ZipPath = Join-Path $DistDir $ZipName
 
+Write-Host "==> Building Solomon Admin UI" -ForegroundColor Cyan
+& (Join-Path $PSScriptRoot "build-admin-ui.ps1")
+
 Write-Host "==> Restoring and publishing Solomon.Worker (win-x64, self-contained)" -ForegroundColor Cyan
 Push-Location $Root
 try {
