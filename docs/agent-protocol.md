@@ -18,18 +18,13 @@ Canonical contract between the Solomon Windows agent and the cloud web applicati
   "agentId": "uuid",
   "timestamp": "2026-06-20T10:00:00Z",
   "inputFolders": ["Subfolder1", "Subfolder2"],
-  "inputRootPath": "C:\\Solomon\\Input",
-  "paymentTraffic": "domestic",
-  "filePrefix": "NA_"
+  "inputRootPath": "C:\\Solomon\\Input"
 }
 ```
 
 `inputFolders` lists **immediate subdirectories** of the configured Input root folder. Empty array if none exist.
 
-Optional fields:
-- `inputRootPath` — configured Input root path on the agent machine
-- `paymentTraffic` — `domestic` (domaći platni promet) or `foreign` (devizni)
-- `filePrefix` — prefix for preuzete/poslate datoteke (default `NA_` for domestic, `NT_` for foreign)
+Optional field `inputRootPath` reports the configured Input root path on the agent machine.
 
 ### Server → Agent (job dispatch)
 

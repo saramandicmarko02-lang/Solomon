@@ -26,12 +26,6 @@ public sealed class HeartbeatMessage
     /// <summary>Configured Input root path on the agent machine (optional but recommended).</summary>
     [JsonPropertyName("inputRootPath")]
     public string? InputRootPath { get; init; }
-
-    [JsonPropertyName("paymentTraffic")]
-    public string? PaymentTraffic { get; init; }
-
-    [JsonPropertyName("filePrefix")]
-    public string? FilePrefix { get; init; }
 }
 
 public sealed class JobDispatchMessage

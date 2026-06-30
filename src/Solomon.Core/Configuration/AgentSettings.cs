@@ -18,20 +18,6 @@ public sealed class AgentSettings
 
     /// <summary>Enrollment endpoint path relative to ServerBaseUrl, e.g. /agent/enroll</summary>
     public string EnrollmentPath { get; set; } = "/agent/enroll";
-
-    /// <summary>domestic | foreign — determines default file prefix for Hal E-Bank datoteke.</summary>
-    public string PaymentTraffic { get; set; } = PaymentTrafficValues.Domestic;
-
-    /// <summary>Prefix for preuzete/poslate datoteke, npr. NA_ (domaći) ili NT_ (devizni).</summary>
-    public string FilePrefix { get; set; } = FilePrefixDefaults.Domestic;
-
-    public void Normalize()
-    {
-        PaymentTraffic = PaymentTrafficValues.Normalize(PaymentTraffic);
-        FilePrefix = string.IsNullOrWhiteSpace(FilePrefix)
-            ? FilePrefixDefaults.ForPaymentTraffic(PaymentTraffic)
-            : FilePrefix.Trim();
-    }
 }
 
 public sealed class StoredCredentials

@@ -2,15 +2,12 @@
 
 import { useMemo } from "react";
 import { useFolders } from "@/lib/hooks/useFolders";
-import { useStatus } from "@/lib/hooks/useStatus";
 import { formatNumber } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
-import { TemplatePrepForm } from "@/components/folders/template-prep-form";
 import { Folder } from "lucide-react";
 
 export function FoldersPage() {
   const { data, loading, error } = useFolders();
-  const { data: status, loading: statusLoading, refresh: refreshStatus } = useStatus();
 
   const bars = useMemo(() => {
     if (!data?.folders.length) return [];
@@ -33,18 +30,10 @@ export function FoldersPage() {
     <div className="animate-fade-up px-7 py-[26px] pb-12">
       <h1 className="m-0 text-2xl font-bold tracking-tight">Folderi</h1>
       <p className="mt-1.5 text-[13.5px] text-[var(--tx2)]">
-        Priprema šablona, subfolderi i broj datoteka u svakom.
+        Detektovani subfolderi i broj datoteka u svakom.
       </p>
 
-      {status ? (
-        <div className="mt-[22px]">
-          <TemplatePrepForm status={status} onSaved={() => void refreshStatus()} />
-        </div>
-      ) : statusLoading ? (
-        <Card className="mt-[22px] p-5 text-[13px] text-[var(--tx2)]">Učitavanje podešavanja…</Card>
-      ) : null}
-
-      <Card className="mt-[18px] mb-[18px] flex items-center gap-3 px-[18px] py-4">
+      <Card className="mt-[22px] mb-[18px] flex items-center gap-3 px-[18px] py-4">
         <Folder className="size-[18px] text-[var(--acc2)]" />
         <div className="min-w-0 flex-1">
           <div className="text-[11.5px] text-[var(--tx3)]">Input folder</div>

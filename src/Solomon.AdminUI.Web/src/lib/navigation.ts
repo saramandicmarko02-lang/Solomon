@@ -49,7 +49,7 @@ export const PAGES: Record<PageId, PageMeta> = {
   overview: { label: "Pregled", sub: "Sažetak stanja", icon: "layout-dashboard" },
   server: { label: "Server i konekcija", sub: "WebSocket veza", icon: "server" },
   enrollment: { label: "Registracija", sub: "Enrollment", icon: "id-card" },
-  folders: { label: "Folderi", sub: "Šablon i subfolderi", icon: "folder" },
+  folders: { label: "Folderi", sub: "Subfolderi i datoteke", icon: "folder" },
   logs: {
     label: "Aktivnost / Logovi",
     sub: "Događaji agenta",

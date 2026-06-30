@@ -1,5 +1,3 @@
-export type PaymentTraffic = "domestic" | "foreign";
-
 export interface AgentStatus {
   enrolled: boolean;
   agentId: string | null;
@@ -12,8 +10,6 @@ export interface AgentStatus {
   adminPort: number;
   heartbeatIntervalSeconds: number;
   enrollmentPath: string;
-  paymentTraffic: PaymentTraffic;
-  filePrefix: string;
   solomonVersion?: string;
   hostname?: string;
 }
@@ -30,8 +26,6 @@ export interface SettingsUpdateRequest {
   adminPort?: number;
   heartbeatIntervalSeconds?: number;
   enrollmentPath?: string;
-  paymentTraffic?: string;
-  filePrefix?: string;
 }
 
 export interface ApiSuccessResponse {

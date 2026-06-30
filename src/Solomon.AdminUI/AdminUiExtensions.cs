@@ -40,8 +40,6 @@ public static class AdminUiExtensions
                 adminPort = settings.AdminPort,
                 heartbeatIntervalSeconds = settings.HeartbeatIntervalSeconds,
                 enrollmentPath = settings.EnrollmentPath,
-                paymentTraffic = settings.PaymentTraffic,
-                filePrefix = settings.FilePrefix,
                 solomonVersion = snapshot.SolomonVersion,
                 hostname = snapshot.Hostname
             });
@@ -208,23 +206,6 @@ public static class AdminUiExtensions
                 settings.EnrollmentPath = body.EnrollmentPath.Trim();
             }
 
-            if (!string.IsNullOrWhiteSpace(body.PaymentTraffic))
-            {
-                settings.PaymentTraffic = PaymentTrafficValues.Normalize(body.PaymentTraffic);
-            }
-
-            if (!string.IsNullOrWhiteSpace(body.FilePrefix))
-            {
-                var prefix = body.FilePrefix.Trim();
-                if (prefix.Length > 16 || prefix.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
-                {
-                    return Results.BadRequest(new { error = "Invalid file prefix." });
-                }
-
-                settings.FilePrefix = prefix;
-            }
-
-            settings.Normalize();
             config.SaveSettings(settings);
             return Results.Ok(new { success = true, message = "Settings saved. Restart service if admin port changed." });
         });
@@ -273,8 +254,6 @@ public static class AdminUiExtensions
         public int? AdminPort { get; init; }
         public int? HeartbeatIntervalSeconds { get; init; }
         public string? EnrollmentPath { get; init; }
-        public string? PaymentTraffic { get; init; }
-        public string? FilePrefix { get; init; }
     }
 
     private sealed class EnrollRequest
