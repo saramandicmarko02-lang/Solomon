@@ -1,12 +1,17 @@
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Solomon.Core.Configuration;
 using Solomon.Core.Protocol;
 
 namespace Solomon.Core.Services;
 
 public interface IJobWriter
 {
-    Task<(bool Success, string? Error)> WriteJobAsync(JobDispatchMessage job, string inputRootPath, CancellationToken cancellationToken);
+    Task<(bool Success, string? Error)> WriteJobAsync(
+        JobDispatchMessage job,
+        string inputRootPath,
+        string? filePrefix,
+        CancellationToken cancellationToken);
 }
 
 public sealed class JobWriter : IJobWriter
@@ -21,6 +26,7 @@ public sealed class JobWriter : IJobWriter
     public async Task<(bool Success, string? Error)> WriteJobAsync(
         JobDispatchMessage job,
         string inputRootPath,
+        string? filePrefix,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(inputRootPath))
@@ -28,7 +34,8 @@ public sealed class JobWriter : IJobWriter
             return (false, "Input folder is not configured.");
         }
 
-        if (string.IsNullOrWhiteSpace(job.FileName) || job.FileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+        var fileName = FileNaming.ApplyPrefix(job.FileName, filePrefix);
+        if (string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
         {
             return (false, "Invalid file name.");
         }
@@ -38,8 +45,8 @@ public sealed class JobWriter : IJobWriter
             var targetDir = ResolveTargetDirectory(inputRootPath, job.TargetFolder);
             Directory.CreateDirectory(targetDir);
 
-            var finalPath = Path.Combine(targetDir, job.FileName);
-            var tempPath = Path.Combine(targetDir, $".{job.JobId}.{job.FileName}.tmp");
+            var finalPath = Path.Combine(targetDir, fileName);
+            var tempPath = Path.Combine(targetDir, $".{job.JobId}.{fileName}.tmp");
 
             var encoding = ResolveEncoding(job.Encoding);
             await File.WriteAllTextAsync(tempPath, job.Content, encoding, cancellationToken);

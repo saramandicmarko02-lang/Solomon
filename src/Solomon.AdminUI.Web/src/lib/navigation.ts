@@ -5,7 +5,6 @@ export type PageId =
   | "folders"
   | "logs"
   | "system"
-  | "privacy"
   | "settings";
 
 export type SectionKey = "pregled" | "konekcija" | "podaci" | "sistem";
@@ -42,7 +41,7 @@ export const SECTIONS: NavSection[] = [
     key: "sistem",
     label: "Sistem",
     icon: "cpu",
-    pages: ["system", "privacy", "settings"],
+    pages: ["system", "settings"],
   },
 ];
 
@@ -50,7 +49,7 @@ export const PAGES: Record<PageId, PageMeta> = {
   overview: { label: "Pregled", sub: "Sažetak stanja", icon: "layout-dashboard" },
   server: { label: "Server i konekcija", sub: "WebSocket veza", icon: "server" },
   enrollment: { label: "Registracija", sub: "Enrollment", icon: "id-card" },
-  folders: { label: "Folderi", sub: "Subfolderi i datoteke", icon: "folder" },
+  folders: { label: "Folderi", sub: "Šablon i subfolderi", icon: "folder" },
   logs: {
     label: "Aktivnost / Logovi",
     sub: "Događaji agenta",
@@ -58,7 +57,6 @@ export const PAGES: Record<PageId, PageMeta> = {
     showDot: true,
   },
   system: { label: "Sistem", sub: "Mašina i runtime", icon: "cpu" },
-  privacy: { label: "Privatnost", sub: "Šta se šalje", icon: "lock" },
   settings: { label: "Podešavanja", sub: "Servis i intervali", icon: "settings" },
 };
 

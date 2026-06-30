@@ -26,7 +26,6 @@ This runs `next build` (static export to `out/`) and copies files to `../Solomon
 - **Recharts** for dashboard charts
 - **SPA navigation** via client state (no URL routing)
 
-## Phases
+## Data
 
-- **Phase 1–2 (current):** AppShell + Pregled page with mock data via `useOverviewMetrics`
-- **Phase 3+:** Wire to `/api/*` endpoints on Solomon Worker
+All pages load live data from Solomon Worker `/api/*` endpoints when the panel is served at `http://127.0.0.1:5050`.

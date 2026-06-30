@@ -75,9 +75,9 @@ export function LogsPage() {
   return (
     <div className="animate-fade-up max-w-[1320px] px-7 py-[26px] pb-12">
       <h1 className="m-0 text-2xl font-bold tracking-tight">Aktivnost / Logovi</h1>
-      <p className="mt-1.5 text-[13.5px] text-[var(--tx2)]">
-        Događaji agenta — podaci sa GET /api/activity, agregacija client-side.
-      </p>
+        <p className="mt-1.5 text-[13.5px] text-[var(--tx2)]">
+          Svi događaji agenta — filtrirano i grupisano.
+        </p>
       {error ? <p className="mt-2 text-sm text-[var(--red)]">{error}</p> : null}
 
       <div className="mt-5 grid grid-cols-2 gap-3.5 lg:grid-cols-4">

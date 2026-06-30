@@ -7,7 +7,6 @@ import {
   Folder,
   ScrollText,
   Cpu,
-  Lock,
   Settings,
   PanelLeft,
   type LucideIcon,
@@ -30,7 +29,6 @@ const ICONS: Record<string, LucideIcon> = {
   folder: Folder,
   "scroll-text": ScrollText,
   cpu: Cpu,
-  lock: Lock,
   settings: Settings,
 };
 

@@ -7,7 +7,7 @@ import { useFormFields } from "@/lib/hooks/useFormFields";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { FormMessage } from "@/components/shared/form-message";
-import { Check, RefreshCw } from "lucide-react";
+import { Check } from "lucide-react";
 
 interface ConnectionParamsFormProps {
   status: AgentStatus;
@@ -140,10 +140,6 @@ export function ConnectionParamsForm({
         <Button type="submit" disabled={saving}>
           <Check className="size-4" />
           {saving ? "Čuvanje…" : "Sačuvaj i poveži"}
-        </Button>
-        <Button type="button" variant="outline" disabled>
-          <RefreshCw className="size-4" />
-          Test konekcije
         </Button>
       </div>
       <FormMessage text={message?.text ?? null} ok={message?.ok} />

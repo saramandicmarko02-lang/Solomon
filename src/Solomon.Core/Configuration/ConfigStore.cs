@@ -39,6 +39,7 @@ public sealed class ConfigStore : IConfigStore
     {
         lock (_lock)
         {
+            _settings.Normalize();
             return CloneSettings(_settings);
         }
     }
@@ -48,6 +49,7 @@ public sealed class ConfigStore : IConfigStore
         lock (_lock)
         {
             _settings = CloneSettings(settings);
+            _settings.Normalize();
             var path = Path.Combine(_dataDirectory, "settings.json");
             File.WriteAllText(path, JsonSerializer.Serialize(_settings, JsonOptions));
         }
@@ -153,7 +155,9 @@ public sealed class ConfigStore : IConfigStore
         AdminPort = s.AdminPort,
         HeartbeatIntervalSeconds = s.HeartbeatIntervalSeconds,
         InputFolderPath = s.InputFolderPath,
-        EnrollmentPath = s.EnrollmentPath
+        EnrollmentPath = s.EnrollmentPath,
+        PaymentTraffic = s.PaymentTraffic,
+        FilePrefix = s.FilePrefix
     };
 
     private static StoredCredentials CloneCredentials(StoredCredentials c) => new()

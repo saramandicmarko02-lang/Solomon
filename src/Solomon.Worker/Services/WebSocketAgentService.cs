@@ -167,7 +167,9 @@ public sealed class WebSocketAgentService : BackgroundService
                 InputFolders = folders,
                 InputRootPath = string.IsNullOrWhiteSpace(settings.InputFolderPath)
                     ? null
-                    : settings.InputFolderPath.Trim()
+                    : settings.InputFolderPath.Trim(),
+                PaymentTraffic = settings.PaymentTraffic,
+                FilePrefix = settings.FilePrefix
             };
 
             await SendJsonAsync(socket, heartbeat, cancellationToken);
@@ -235,7 +237,11 @@ public sealed class WebSocketAgentService : BackgroundService
     {
         _runtimeState.AddActivity("info", $"Job received: {job.JobId} → {job.FileName}");
         var settings = _configStore.GetSettings();
-        var (success, error) = await _jobWriter.WriteJobAsync(job, settings.InputFolderPath, cancellationToken);
+        var (success, error) = await _jobWriter.WriteJobAsync(
+            job,
+            settings.InputFolderPath,
+            settings.FilePrefix,
+            cancellationToken);
 
         var status = new JobStatusMessage
         {

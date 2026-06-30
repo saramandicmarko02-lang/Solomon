@@ -8,7 +8,6 @@ import { EnrollmentPage } from "@/components/pages/enrollment-page";
 import { FoldersPage } from "@/components/pages/folders-page";
 import { LogsPage } from "@/components/pages/logs-page";
 import { SystemPage } from "@/components/pages/system-page";
-import { PrivacyPage } from "@/components/pages/privacy-page";
 import { SettingsPage } from "@/components/pages/settings-page";
 import type { PageId } from "@/lib/navigation";
 
@@ -30,8 +29,6 @@ export function AdminApp() {
         return <LogsPage />;
       case "system":
         return <SystemPage />;
-      case "privacy":
-        return <PrivacyPage />;
       case "settings":
         return <SettingsPage />;
       default:
